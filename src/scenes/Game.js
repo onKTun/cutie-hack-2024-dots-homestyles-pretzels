@@ -19,32 +19,13 @@ export class Game extends Scene {
     this.load.image("spaceShip", "assets/spaceShip.png");
   }
   create() {
-    this.physics.world.gravity.y = 0;
-
     this.add
       .image(this.scale.width / 2, this.scale.height / 2, "background")
       .setDisplaySize(this.scale.width, this.scale.height);
-
     this.add.image(512, this.scale.height, "earth").setOrigin(0.5, 1);
 
-    this.player = this.add
-      .image(375, 550, "spaceShip")
-      .setScale(0.03)
-      .setInteractive({ draggable: true });
-
-    this.player.on("drag", (pointer, dragX, dragY) =>
-      this.player.setPosition(dragX, dragY)
-    );
-
-    this.physics.world.enable(this.player);
-    this.player.body.setCollideWorldBounds(true);
-
+    instantiatePlayer(this);
     initDebris(100, this);
-  }
-
-  isMoving() {
-    if (dragging == true) {
-    }
   }
 
   update() {
@@ -53,6 +34,28 @@ export class Game extends Scene {
       member.setAngularVelocity(40);
     });
   }
+}
+function instantiatePlayer(context) {
+  if (context.player) {
+    context.player.destroy();
+  }
+
+  context.player = context.add
+    .image(375, 550, "spaceShip")
+    .setScale(0.03)
+    .setInteractive({ draggable: true });
+
+  context.player.on(
+    "pointerdown",
+    function (pointer, localX, localY, event) {
+      context.player.body.setVelocity(10, -100);
+    },
+    this
+  );
+
+  context.physics.world.enable(context.player);
+  context.player.body.setCircle(10, 0, 0);
+  context.player.body.setCollideWorldBounds(true);
 }
 
 function initDebris(count, context) {
@@ -79,5 +82,23 @@ function initDebris(count, context) {
   context.debris.children.iterate((member) => {
     container.add(member);
     context.physics.world.enable(member);
+    member.body.setCircle(4, 0, 0);
+    context.physics.add.overlap(
+      context.player,
+      context.debris,
+      hitPlayer,
+      null,
+      context
+    );
   });
+}
+function hitPlayer(player, debris) {
+  console.log("collided");
+
+  resetPlayer(this);
+}
+
+function resetPlayer(context) {
+  context.player.setPosition(375, 550);
+  context.player.body.setVelocity(0, 0);
 }
