@@ -192,7 +192,7 @@ export class UI extends Scene {
 
     // Title
     let year1 = this.add
-      .text(this.scale.width / 2, 75, year, { fontSize: 64 })
+      .text(this.scale.width / 2, 75, "COST", { fontSize: 64 })
       .setOrigin(0.5, 0.5);
     let money1 = this.add
       .text(this.scale.width / 2, 125, "$" + money, { fontSize: 36 })
