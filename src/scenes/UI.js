@@ -126,12 +126,12 @@ export class UI extends Scene {
     //spacecraft buttons
     const spaceshipButton = this.add.graphics();
     spaceshipButton.fillStyle(0x0b1a33, 1);
-    spaceshipButton.fillRect(50, 270 - 37 / 2, 120, 50);
-    const spaceshipContainer = this.add.container(110, 275);
+    spaceshipButton.fillRect(140, 270 - 37 / 2, 120, 50);
+    const spaceshipContainer = this.add.container(200, 275);
     spaceshipContainer.setSize(120, 50);
     spaceshipContainer.setInteractive({ useHandCursor: true });
     let spaceshipText = this.add
-      .text(110, 275, "Spaceship", { fontSize: 16 })
+      .text(200, 275, "Launch", { fontSize: 16 })
       .setOrigin(0.5, 0.5);
     spaceshipContainer.on("pointerdown", () => {
       this.events.emit("launch");

@@ -29,10 +29,14 @@ export class Preloader extends Scene {
     this.load.image("logo", "logo.png");
     this.load.image("earth", "earth.png");
     this.load.image("satellite", "Satellite.png");
-    this.load.image('spaceJunkIcon', 'spaceJunkIcon.png');
+    this.load.image("spaceJunkIcon", "spaceJunkIcon.png");
     this.load.svg("dropdownIcon", "chevron-down-solid.svg");
     this.load.svg("closeArrow", "chevron-up-solid.svg");
-
+    this.load.audio("boom", "explosion-sound-effect-2-241820.mp3");
+    this.load.audio(
+      "music",
+      "pad-space-travel-hyperdrive-engine-humming-235901.mp3"
+    );
   }
 
   create() {

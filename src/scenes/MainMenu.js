@@ -11,7 +11,7 @@ export class MainMenu extends Scene {
       .setDisplaySize(this.scale.width, this.scale.height);
 
     this.add
-      .text(512, 460, "Main Menu", {
+      .text(512, 400, "Start Game", {
         fontFamily: "Arial Black",
         fontSize: 38,
         color: "#ffffff",
@@ -22,7 +22,7 @@ export class MainMenu extends Scene {
       .setOrigin(0.5);
 
     this.input.once("pointerdown", () => {
-      this.scene.start("IntroSequence"); 
+      this.scene.start("IntroSequence");
     });
   }
 }

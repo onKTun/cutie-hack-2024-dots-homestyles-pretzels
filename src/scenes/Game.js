@@ -12,10 +12,12 @@ export class Game extends Scene {
   debris;
   player;
   collisionCount;
+  canOverlap;
 
   constructor() {
     super("Game");
     this.collisionCount = 0;
+    this.canOverlap = true;
   }
 
   preload() {
@@ -23,7 +25,9 @@ export class Game extends Scene {
   }
   create() {
     this.debris = this.physics.add.group();
-
+    this.sound.play("music", {
+      loop: true, // Set whether the sound should loop
+    });
     this.add
       .image(this.scale.width / 2, this.scale.height / 2, "background")
       .setDisplaySize(this.scale.width, this.scale.height);
@@ -135,14 +139,19 @@ function initDebris(count, context) {
   });
 }
 function hitPlayer(player, debris) {
-  console.log("collided");
-  resetPlayer(this);
-  this.collisionCount++;
+  if (this.canOverlap) {
+    this.canOverlap = false; // Prevent further overlap triggers
 
-  if (this.collisionCount > 100) {
-    this.scene.start("GameOver");
-  } else {
-    initDebris(1, this);
+    console.log("collided");
+    resetPlayer(this);
+    this.collisionCount++;
+    this.sound.play("boom");
+
+    initDebris(10, this);
+    // Reset the flag after a delay (e.g., 1 second)
+    this.time.delayedCall(1000, () => {
+      this.canOverlap = true; // Allow overlap again after the delay
+    });
   }
 }
 
@@ -154,9 +163,7 @@ function cleanUpTrash(count, context) {
   let removedCount = 0;
   context.debris.children.iterate((member) => {
     if (removedCount < count) {
-      if (member) {
-        member.destroy();
-      }
+      member.destroy();
       context.events.emit("removeDebris");
       context.events.emit("cleanupCost");
 
