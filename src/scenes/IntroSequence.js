@@ -38,7 +38,7 @@ export class IntroSequence extends Scene {
           .setOrigin(0.5);
 
         const paragraphText =
-          "You oversee all space expedition on earth, your goal is to send 100 spaceships to the moon. Money is not an issue, time is not an issue, your issue is the excessive amount of space trash accumulated since we started to explore space. Navigate this issue and find a new beginning for humanity.";
+          "You oversee all space expedition on earth, your goal is to send 1 spaceships to the moon. Money is not an issue, time is not an issue, your issue is the excessive amount of space trash accumulated since we started to explore space. Navigate this issue and find a new beginning for humanity.";
 
         this.add
           .text(512, 350, paragraphText, {
