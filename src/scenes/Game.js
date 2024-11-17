@@ -103,5 +103,5 @@ function resetPlayer(context) {
   context.player.body.setVelocity(0, 0);
 }
 function cleanUpTrash(count, context) {
-  context.debris;
+  context.debris.children;
 }
