@@ -30,7 +30,7 @@ export class IntroSequence extends Scene{
             active: () => {
 
                 this.add
-                .text(512, 100, "Joy Junkride", {
+                .text(512, 100, "Junk Joyride", {
                 fontFamily: "Space Grotesk",
                 fontSize: 50,
                 color: "#ffffff",

@@ -19,7 +19,7 @@ export class Game extends Scene {
     this.add.image(500, 100, "satellite").setScale(2);
 
     this.add.image(512, this.scale.height, "earth").setOrigin(0.5, 1);
-
+    this.add.image(750, 200, "moon").setScale(0.2);
     
     const player = this.add.image(375, 550, "spaceShip").setScale(0.03).setInteractive();
 
@@ -28,13 +28,10 @@ export class Game extends Scene {
     
    
     
-    //player.body.setVelocity(0,0);
-    //player.body.setBounce(0.8);
+    
     player.body.setCollideWorldBounds(true);
 
-    let dragging = false;
-    let initialPosition = this.player.getCenter();
-    const releaseVelocity = new Phaser.Math.Vector2(0,0);
+    
   
     
   }
