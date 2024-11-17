@@ -95,6 +95,7 @@ function instantiatePlayer(context) {
   game.events.on(
     "launch",
     function () {
+      context.events.emit("cleanupCost");
       context.player.body.setVelocity(10, -100);
     },
     this
@@ -160,6 +161,7 @@ function resetPlayer(context) {
   context.player.body.setVelocity(0, 0);
 }
 function cleanUpTrash(count, context) {
+  context.sound.play("clean");
   let removedCount = 0;
   context.debris.children.iterate((member) => {
     if (removedCount < count) {

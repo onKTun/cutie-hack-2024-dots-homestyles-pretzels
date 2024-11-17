@@ -37,6 +37,7 @@ export class Preloader extends Scene {
       "music",
       "pad-space-travel-hyperdrive-engine-humming-235901.mp3"
     );
+    this.load.audio("clean", "brush.mp3");
   }
 
   create() {
