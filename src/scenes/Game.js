@@ -102,3 +102,6 @@ function resetPlayer(context) {
   context.player.setPosition(375, 550);
   context.player.body.setVelocity(0, 0);
 }
+function cleanUpTrash(count, context) {
+  context.debris;
+}
