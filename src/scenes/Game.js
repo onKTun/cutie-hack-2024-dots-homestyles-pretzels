@@ -11,14 +11,19 @@ import {
 export class Game extends Scene {
   debris;
   player;
+  collisionCount;
+
   constructor() {
     super("Game");
+    this.collisionCount = 0;
   }
 
   preload() {
     this.load.image("spaceShip", "assets/spaceShip.png");
   }
   create() {
+    this.debris = this.physics.add.group();
+
     this.add
       .image(this.scale.width / 2, this.scale.height / 2, "background")
       .setDisplaySize(this.scale.width, this.scale.height);
@@ -26,6 +31,41 @@ export class Game extends Scene {
 
     instantiatePlayer(this);
     initDebris(100, this);
+
+    const ourGame = this.scene.get("UI");
+    //  Listen for events from it
+    ourGame.events.on(
+      "10",
+      function () {
+        cleanUpTrash(10, this);
+      },
+      this
+    );
+    ourGame.events.on(
+      "20",
+      function () {
+        cleanUpTrash(20, this);
+      },
+      this
+    );
+    ourGame.events.on(
+      "30",
+      function () {
+        cleanUpTrash(30, this);
+      },
+      this
+    );
+
+    const topCollider = this.physics.add
+      .staticImage(0, 100, null)
+      .setDisplaySize(this.scale.width, 10);
+    topCollider.body.setSize(this.scale.width, 10);
+
+    this.physics.add.overlap(this.player, topCollider, () => {
+      console.log("Player collided with top collider");
+      this.scene.start("GameOver");
+      // Add any additional logic for when the player collides with the top collider
+    });
   }
 
   update() {
@@ -33,6 +73,9 @@ export class Game extends Scene {
       this.physics.velocityFromAngle(member.angle, 250, member.body.velocity);
       member.setAngularVelocity(40);
     });
+    if (this.debris.getChildren().length > 200) {
+      this.scene.start("GameOver");
+    }
   }
 }
 function instantiatePlayer(context) {
@@ -44,29 +87,28 @@ function instantiatePlayer(context) {
     .image(375, 550, "spaceShip")
     .setScale(0.03)
     .setInteractive({ draggable: true });
-
-  context.player.on(
-    "pointerdown",
-    function (pointer, localX, localY, event) {
+  const game = context.scene.get("UI");
+  game.events.on(
+    "launch",
+    function () {
       context.player.body.setVelocity(10, -100);
     },
     this
   );
 
   context.physics.world.enable(context.player);
-  context.player.body.setCircle(10, 0, 0);
+  context.player.body.setCircle(500, 250, 500);
   context.player.body.setCollideWorldBounds(true);
 }
 
 function initDebris(count, context) {
-  context.debris = context.physics.add.group();
   for (let index = 0; index < count; index++) {
     const angle = Phaser.Math.FloatBetween(0, 2 * Math.PI);
     const magnitude = Phaser.Math.Between(300, 400);
     const randX = magnitude * Math.cos(angle);
     const randY = magnitude * Math.sin(angle);
     //console.log(`randX: ${randX}, randY: ${randY}`);
-
+    context.events.emit("more");
     context.debris
       .create(randX, randY, "satellite")
       .setScale(2)
@@ -94,8 +136,14 @@ function initDebris(count, context) {
 }
 function hitPlayer(player, debris) {
   console.log("collided");
-
   resetPlayer(this);
+  this.collisionCount++;
+
+  if (this.collisionCount > 100) {
+    this.scene.start("GameOver");
+  } else {
+    initDebris(1, this);
+  }
 }
 
 function resetPlayer(context) {
@@ -103,5 +151,16 @@ function resetPlayer(context) {
   context.player.body.setVelocity(0, 0);
 }
 function cleanUpTrash(count, context) {
-  context.debris.children;
+  let removedCount = 0;
+  context.debris.children.iterate((member) => {
+    if (removedCount < count) {
+      if (member) {
+        member.destroy();
+      }
+      context.events.emit("removeDebris");
+      context.events.emit("cleanupCost");
+
+      removedCount++;
+    }
+  });
 }
