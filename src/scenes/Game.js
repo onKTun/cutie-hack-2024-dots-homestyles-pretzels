@@ -14,14 +14,37 @@ export class Game extends Scene {
     super("Game");
   }
 
+  preload() {
+    this.load.image("spaceShip", "assets/spaceShip.png");
+  }
   create() {
+    this.physics.world.gravity.y = 0;
+
     this.add
       .image(this.scale.width / 2, this.scale.height / 2, "background")
       .setDisplaySize(this.scale.width, this.scale.height);
 
     this.add.image(512, this.scale.height, "earth").setOrigin(0.5, 1);
 
-    initDebris(100, this);
+    const player = this.add
+      .image(375, 550, "spaceShip")
+      .setScale(0.03)
+      .setInteractive();
+
+    this.physics.world.enable(player);
+
+    //player.body.setVelocity(0,0);
+    //player.body.setBounce(0.8);
+    player.body.setCollideWorldBounds(true);
+
+    let dragging = false;
+    let initialPosition = this.player.getCenter();
+    const releaseVelocity = new Phaser.Math.Vector2(0, 0);
+  }
+
+  isMoving() {
+    if (dragging == true) {
+    }
   }
 
   update() {
