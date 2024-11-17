@@ -10,6 +10,7 @@ import {
 
 export class Game extends Scene {
   debris;
+  player;
   constructor() {
     super("Game");
   }
@@ -26,20 +27,19 @@ export class Game extends Scene {
 
     this.add.image(512, this.scale.height, "earth").setOrigin(0.5, 1);
 
-    const player = this.add
+    this.player = this.add
       .image(375, 550, "spaceShip")
       .setScale(0.03)
-      .setInteractive();
+      .setInteractive({ draggable: true });
 
-    this.physics.world.enable(player);
+    this.player.on("drag", (pointer, dragX, dragY) =>
+      this.player.setPosition(dragX, dragY)
+    );
 
-    //player.body.setVelocity(0,0);
-    //player.body.setBounce(0.8);
-    player.body.setCollideWorldBounds(true);
+    this.physics.world.enable(this.player);
+    this.player.body.setCollideWorldBounds(true);
 
-    let dragging = false;
-    let initialPosition = this.player.getCenter();
-    const releaseVelocity = new Phaser.Math.Vector2(0, 0);
+    initDebris(100, this);
   }
 
   isMoving() {
